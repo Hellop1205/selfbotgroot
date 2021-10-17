@@ -1,1 +1,59 @@
-const _0x2dce21=_0x3d64,strings=require('../strings.json'),utils=require(_0x2dce21(0x16e));function _0x3d64(_0x36ffe3,_0x11d354){const _0x3d642a=_0x11d3();return _0x3d64=function(_0x13851f,_0x2da21e){_0x13851f=_0x13851f-0x15b;let _0x43ac47=_0x3d642a[_0x13851f];return _0x43ac47;},_0x3d64(_0x36ffe3,_0x11d354);}module[_0x2dce21(0x162)]['run']=async(_0x1e3985,_0x27b1a7,_0xbc92e9)=>{const _0x24f681=_0x2dce21;let _0xff6bf=_0x27b1a7[_0x24f681(0x163)][_0x24f681(0x16a)][_0x24f681(0x15f)];const _0x214e02=queue[_0x24f681(0x15d)](_0x24f681(0x166));if(!_0xff6bf)return;;if(!_0x214e02)return;;utils['log'](_0x24f681(0x16b)+_0xff6bf[_0x24f681(0x15c)]);if(_0x214e02[_0x24f681(0x169)][_0x24f681(0x16c)]['id']!=_0xff6bf['guild']['id']){utils[_0x24f681(0x15b)](_0x214e02[_0x24f681(0x164)][0x0]),songs=[];for(i=0x0;i<_0x214e02['songs'][_0x24f681(0x161)];i++){songs[_0x24f681(0x15e)](_0x214e02[_0x24f681(0x164)][0x0]);};await _0x214e02['connection'][_0x24f681(0x167)][_0x24f681(0x16d)]();const _0x4278db={'textchannel':_0x27b1a7[_0x24f681(0x15f)],'voiceChannel':_0xff6bf,'connection':null,'songs':songs,'volume':_0x214e02['volume'],'playing':!![],'loop':_0x214e02[_0x24f681(0x165)],'skipped':![]};queue[_0x24f681(0x168)]('queue',_0x4278db),_0x4278db['connection']=await _0xff6bf[_0x24f681(0x16f)](),utils[_0x24f681(0x15b)](_0x4278db[_0x24f681(0x164)][0x0]);}else _0x214e02['connection']=await _0xff6bf[_0x24f681(0x16f)]();return;},module[_0x2dce21(0x162)][_0x2dce21(0x160)]={'list':['join','j']};function _0x11d3(){const _0x390e26=['play','name','get','push','channel','names','length','exports','member','songs','loop','queue','dispatcher','set','voiceChannel','voice','Joined\x20the\x20channel\x20:\x20','guild','end','../utils','join'];_0x11d3=function(){return _0x390e26;};return _0x11d3();}
+const strings = require("../strings.json");
+const utils = require("../utils");
+
+/** 
+ * @description Make the bot join the current voice channel the user is in
+ * @param {Discord.Client} client the client thats runs the commands
+ * @param {Discord.Message} message the command's message
+ * @param {Array<String>}args useless here  
+ */
+module.exports.run = async (client, message, args) => {
+
+    let voiceChannel = message.member.voice.channel;
+    const serverQueue = queue.get("queue");
+    
+    if(!voiceChannel){return };
+    if(!serverQueue){return };
+
+    utils.log(`Joined the channel : ${voiceChannel.name}`);
+
+
+    if(serverQueue.voiceChannel.guild.id != voiceChannel.guild.id){utils.play(serverQueue.songs[0])
+
+        songs = [];
+
+        for(i=0;i<serverQueue.songs.length;i++){
+            songs.push(serverQueue.songs[0]);
+        };
+
+        await serverQueue.connection.dispatcher.end();
+
+        const queueConstruct = {
+            textchannel: message.channel,
+            voiceChannel: voiceChannel,
+            connection: null,
+            songs: songs,
+            volume: serverQueue.volume,
+            playing: true,
+            loop: serverQueue.loop,
+            skipped: false
+        };
+
+        queue.set("queue", queueConstruct);
+
+        queueConstruct.connection = await voiceChannel.join();
+
+        utils.play(queueConstruct.songs[0]);
+
+    } else {
+        serverQueue.connection = await voiceChannel.join();
+    }
+
+
+    return ;
+
+}
+
+module.exports.names = {
+    list: ["join", "j"]
+};

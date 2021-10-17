@@ -1,1 +1,81 @@
-function _0x1270(_0x153458,_0x1d7849){const _0x1270f7=_0x1d78();return _0x1270=function(_0x313a72,_0x243533){_0x313a72=_0x313a72-0x1ca;let _0x44e94c=_0x1270f7[_0x313a72];return _0x44e94c;},_0x1270(_0x153458,_0x1d7849);}const _0x57b0f1=_0x1270,ytdl=require(_0x57b0f1(0x1d6)),strings=require('../strings.json'),utils=require('../utils');module[_0x57b0f1(0x1ca)][_0x57b0f1(0x1e1)]=async(_0x1e9e29,_0x473561,_0x2d8913)=>{const _0x44aa86=_0x57b0f1;if(!_0x2d8913[0x0])return;utils[_0x44aa86(0x1cb)]('Looking\x20for\x20music\x20details...');utils['isURL'](_0x2d8913[0x0])?FUrl=_0x2d8913[0x0]:FUrl=await utils[_0x44aa86(0x1d8)](_0x2d8913);;let _0x492636=_0x473561[_0x44aa86(0x1d4)][_0x44aa86(0x1dc)][_0x44aa86(0x1db)];const _0x229dda=queue[_0x44aa86(0x1da)](_0x44aa86(0x1ce)),_0x14d468=await ytdl['getBasicInfo'](FUrl),_0x2ef479={'title':_0x14d468[_0x44aa86(0x1e0)][_0x44aa86(0x1d2)],'duration':_0x14d468[_0x44aa86(0x1e0)]['lengthSeconds'],'url':FUrl,'requestedby':_0x473561[_0x44aa86(0x1cc)][_0x44aa86(0x1d0)]};utils[_0x44aa86(0x1cb)](_0x44aa86(0x1df));if(!_0x229dda){const _0x15d9d5={'textchannel':_0x473561[_0x44aa86(0x1db)],'voiceChannel':_0x492636,'connection':null,'songs':[],'volume':0xc8,'playing':!![],'loop':!![],'skipped':![]};queue[_0x44aa86(0x1dd)](_0x44aa86(0x1ce),_0x15d9d5),_0x15d9d5[_0x44aa86(0x1cd)][_0x44aa86(0x1d9)](_0x2ef479);if(_0x492636!=null){var _0x5d0a42=await _0x492636[_0x44aa86(0x1cf)]();_0x15d9d5[_0x44aa86(0x1d3)]=_0x5d0a42,utils[_0x44aa86(0x1d5)](_0x15d9d5['songs'][0x0]);}else{queue[_0x44aa86(0x1de)](_0x44aa86(0x1ce));return;};}else{_0x229dda[_0x44aa86(0x1cd)][_0x44aa86(0x1d9)](_0x2ef479),utils[_0x44aa86(0x1cb)](_0x44aa86(0x1d7)+_0x2ef479[_0x44aa86(0x1d2)]);return;};},module[_0x57b0f1(0x1ca)][_0x57b0f1(0x1d1)]={'list':[_0x57b0f1(0x1d5),'p']};function _0x1d78(){const _0x2a0140=['exports','log','author','songs','queue','join','tag','names','title','connection','member','play','ytdl-core','Added\x20music\x20to\x20the\x20queue\x20:\x20','getUrl','push','get','channel','voice','set','delete','Got\x20music\x20details,\x20preparing\x20the\x20music\x20to\x20be\x20played...','videoDetails','run'];_0x1d78=function(){return _0x2a0140;};return _0x1d78();}
+const ytdl = require("ytdl-core");
+
+const strings = require("../strings.json");
+const utils = require("../utils");
+
+
+/** 
+ * @description Play a song with the provided link
+ * @param {Discord.Client} client the client thats runs the commands
+ * @param {Discord.Message} message the command's message
+ * @param {Array<String>}args args[0] must be a link
+ */
+
+
+module.exports.run = async (client, message, args) => {
+
+    if(!args[0]) return ;
+
+    utils.log("Looking for music details...")
+
+    if(utils.isURL(args[0])){
+        FUrl = args[0];
+    } else {
+        FUrl = await utils.getUrl(args)
+    };
+
+    let voiceChannel = message.member.voice.channel; 
+    const serverQueue = queue.get("queue");
+    const songInfo = await ytdl.getBasicInfo(FUrl);
+
+    const song = {
+        title: songInfo.videoDetails.title,
+        duration: songInfo.videoDetails.lengthSeconds,
+        url: FUrl,
+        requestedby: message.author.tag
+    };
+
+    utils.log("Got music details, preparing the music to be played...")
+
+    if(!serverQueue) {
+
+        const queueConstruct = {
+            textchannel: message.channel,
+            voiceChannel: voiceChannel,
+            connection: null,
+            songs: [],
+            volume: 200,
+            playing: true,
+            loop: true,
+            skipped: false
+        };
+
+        queue.set("queue", queueConstruct);
+        queueConstruct.songs.push(song);
+
+        if (voiceChannel != null) { 
+
+
+
+            var connection = await voiceChannel.join();
+            queueConstruct.connection = connection;
+
+            utils.play(queueConstruct.songs[0]);
+
+        } else {
+            queue.delete("queue");
+            return ;
+        };
+    } else {
+
+        serverQueue.songs.push(song);
+        utils.log(`Added music to the queue : ${song.title}`)
+
+        return ;
+    };
+
+};
+
+module.exports.names = {
+    list: ["play", "p"]
+};

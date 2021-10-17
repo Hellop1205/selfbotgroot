@@ -1,7 +1,7 @@
 {
-  "name": "selfgroot",
+  "name": "selfrythm",
   "version": "1.1.0",
-  "description": "This project is a **Self groot Bot** in **[Node JS](https://nodejs.org/)**. His purpose is to do the same actions as groot while being a selfbot. This has many advantages, for example you can use it on any servs you're in, even without permissions.",
+  "description": "This project is a **Self Rythm Bot** in **[Node JS](https://nodejs.org/)**. His purpose is to do the same actions as **[Rythm](https://rythmbot.co/)**  while being a selfbot. This has many advantages, for example you can use it on any servs you're in, even without permissions.",
   "main": "index.js",
   "scripts": {
     "start": "node index.js"

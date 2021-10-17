@@ -1,1 +1,28 @@
-function _0x22e5(_0x2f1dff,_0x2e3829){const _0x22e548=_0x2e38();return _0x22e5=function(_0x48b023,_0x3fff97){_0x48b023=_0x48b023-0x1e2;let _0x2b9cd4=_0x22e548[_0x48b023];return _0x2b9cd4;},_0x22e5(_0x2f1dff,_0x2e3829);}function _0x2e38(){const _0x4ebd75=['get','run','dispatcher','stop','songs','log','end','names','Stopped\x20playing\x20music','queue','../utils','exports'];_0x2e38=function(){return _0x4ebd75;};return _0x2e38();}const _0x5f2258=_0x22e5,strings=require('../strings.json'),utils=require(_0x5f2258(0x1ec));module[_0x5f2258(0x1ed)][_0x5f2258(0x1e3)]=async(_0x4a415b,_0x5a8a93,_0x289d22)=>{const _0x7eaeb3=_0x5f2258,_0x47f1d4=queue[_0x7eaeb3(0x1e2)](_0x7eaeb3(0x1eb));if(!_0x47f1d4)return;;_0x47f1d4[_0x7eaeb3(0x1e6)]=[],utils[_0x7eaeb3(0x1e7)](_0x7eaeb3(0x1ea)),_0x47f1d4['connection'][_0x7eaeb3(0x1e4)][_0x7eaeb3(0x1e8)]();return;},module[_0x5f2258(0x1ed)][_0x5f2258(0x1e9)]={'list':[_0x5f2258(0x1e5),'st']};
+const strings = require("../strings.json");
+const utils = require("../utils");
+
+/** 
+ * @description Stops the music and make the bot leave the channel
+ * @param {Discord.Client} client the client thats runs the commands
+ * @param {Discord.Message} message the command's message
+ * @param {Array<String>}args useless here  
+ */
+module.exports.run = async (client, message, args) => {
+
+    const serverQueue = queue.get("queue");
+    if(!serverQueue){return ;};
+
+    serverQueue.songs = [];
+
+
+    utils.log("Stopped playing music");
+
+    serverQueue.connection.dispatcher.end();
+
+    return ;
+
+};
+
+module.exports.names = {
+    list: ["stop", "st"]
+};

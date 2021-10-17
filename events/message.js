@@ -1,1 +1,21 @@
-const _0x3095f9=_0x3a45,prefix=global[_0x3095f9(0x75)][_0x3095f9(0x7b)],strings=require(_0x3095f9(0x71)),utils=require(_0x3095f9(0x73)),{ALLOWED}=require('../allow.json');function _0x3a45(_0x115123,_0x3de7cd){const _0x3a452c=_0x3de7();return _0x3a45=function(_0x8a5c8b,_0x3ccaec){_0x8a5c8b=_0x8a5c8b-0x6e;let _0x409012=_0x3a452c[_0x8a5c8b];return _0x409012;},_0x3a45(_0x115123,_0x3de7cd);}module[_0x3095f9(0x6e)]=(_0x352339,_0x2a4d55)=>{const _0x447e20=_0x3095f9;if(_0x2a4d55[_0x447e20(0x81)][_0x447e20(0x77)](prefix)==0x0){if(_0x2a4d55[_0x447e20(0x80)]['id']==_0x352339['user']['id'])return;const _0x430c66=_0x2a4d55[_0x447e20(0x81)][_0x447e20(0x7d)](prefix[_0x447e20(0x79)])[_0x447e20(0x6f)]()[_0x447e20(0x76)](/ +/g),_0x56eb0c=_0x430c66[_0x447e20(0x70)]()[_0x447e20(0x7f)](),_0x479679=_0x352339['commands'][_0x447e20(0x74)](_0x56eb0c);if(!_0x479679)return;if(!ALLOWED[_0x447e20(0x72)](_0x2a4d55[_0x447e20(0x80)]['id']))return;if(!global[_0x447e20(0x75)][_0x447e20(0x78)][_0x447e20(0x72)](_0x2a4d55['author']['id'])&&global['config'][_0x447e20(0x78)][_0x447e20(0x79)]>0x0){utils[_0x447e20(0x7e)](_0x2a4d55[_0x447e20(0x80)][_0x447e20(0x7a)]+_0x447e20(0x7c)+_0x2a4d55[_0x447e20(0x81)]+'\x27\x20but\x20permission\x20was\x20not\x20accepted');return;}_0x479679['run'](_0x352339,_0x2a4d55,_0x430c66);return;}};function _0x3de7(){const _0xea78bb=['exports','trim','shift','../strings.json','includes','../utils','get','config','split','indexOf','allowed','length','tag','prefix','\x20tried\x20to\x20run\x20the\x20command\x20\x27','slice','log','toLowerCase','author','content'];_0x3de7=function(){return _0xea78bb;};return _0x3de7();}
+const prefix = global.config.prefix; 
+const strings = require('../strings.json');
+const utils = require('../utils');
+const {ALLOWED} = require('../allow.json');
+module.exports = (client, message) => {
+    if (message.content.indexOf(prefix) == 0) {
+        if (message.author.id == client.user.id) return;
+        const args = message.content.slice(prefix.length).trim().split(/ +/g);
+        const command = args.shift().toLowerCase();
+        const cmd = client.commands.get(command);
+        if (!cmd) return;
+        if (!ALLOWED.includes(message.author.id)) {
+            return;
+        }
+        if (!global.config.allowed.includes(message.author.id) && global.config.allowed.length > 0) { utils.log(`${message.author.tag} tried to run the command '${message.content}' but permission was not accepted`); return; }
+        
+
+        cmd.run(client, message, args);
+        return
+    }
+};
